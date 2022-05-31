@@ -1,0 +1,2092 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot 1`] = `
+Object {
+  "Outputs": Object {
+    "ClusterInstanceIds": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            Object {
+              "Ref": "AeronClusterInstance0F2E49FA8",
+            },
+            ",",
+            Object {
+              "Ref": "AeronClusterInstance127C2AE61",
+            },
+            ",",
+            Object {
+              "Ref": "AeronClusterInstance2B398DDB6",
+            },
+          ],
+        ],
+      },
+    },
+    "ClusterInstanceIps": Object {
+      "Value": Object {
+        "Fn::Join": Array [
+          "",
+          Array [
+            Object {
+              "Fn::GetAtt": Array [
+                "AeronClusterInstance0F2E49FA8",
+                "PrivateIp",
+              ],
+            },
+            ",",
+            Object {
+              "Fn::GetAtt": Array [
+                "AeronClusterInstance127C2AE61",
+                "PrivateIp",
+              ],
+            },
+            ",",
+            Object {
+              "Fn::GetAtt": Array [
+                "AeronClusterInstance2B398DDB6",
+                "PrivateIp",
+              ],
+            },
+          ],
+        ],
+      },
+    },
+    "TransitGatewayId": Object {
+      "Value": Object {
+        "Fn::GetAtt": Array [
+          "AeronMulticastAeronMulticastTransitGatewayBDF277AB",
+          "Id",
+        ],
+      },
+    },
+    "VpcFlowlogsBucket": Object {
+      "Value": Object {
+        "Ref": "VpcFlowLogsBucket3B29CF33",
+      },
+    },
+    "VpcId": Object {
+      "Value": Object {
+        "Ref": "VPCB9E5F0B4",
+      },
+    },
+  },
+  "Parameters": Object {
+    "BootstrapVersion": Object {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+    "SsmParameterValueawsservicecanonicalubuntuserverfocalstablecurrentamd64hvmebsgp2amiidC96584B6F00A464EAD1953AFF4B05118Parameter": Object {
+      "Default": "/aws/service/canonical/ubuntu/server/focal/stable/current/amd64/hvm/ebs-gp2/ami-id",
+      "Type": "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>",
+    },
+  },
+  "Resources": Object {
+    "AeronClusterAeronControlSecurityGroup4C75EBFF": Object {
+      "Properties": Object {
+        "GroupDescription": "Security group for Control Traffic of Aeron Cluster",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow http egress to any",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80,
+          },
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow https egress to any",
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "AeronClusterAeronControlSecurityGroupfromtestAeronClusterAeronControlSecurityGroupB016439EALLICMPF86C1250": Object {
+      "Properties": Object {
+        "Description": "Allow all ICMP from this security group",
+        "FromPort": -1,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronControlSecurityGroup4C75EBFF",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "icmp",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronControlSecurityGroup4C75EBFF",
+            "GroupId",
+          ],
+        },
+        "ToPort": -1,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "AeronClusterAeronControlSecurityGrouptotestAeronClusterAeronControlSecurityGroupB016439EALLICMP760D94B0": Object {
+      "Properties": Object {
+        "Description": "Allow all ICMP to this security group",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronControlSecurityGroup4C75EBFF",
+            "GroupId",
+          ],
+        },
+        "FromPort": -1,
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronControlSecurityGroup4C75EBFF",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "icmp",
+        "ToPort": -1,
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "AeronClusterAeronDataSecurityGroup2A50CC39": Object {
+      "Properties": Object {
+        "GroupDescription": "Security group for Data Traffic of Aeron Cluster",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "224.0.0.2/32",
+            "Description": "IGMP leave",
+            "IpProtocol": "2",
+          },
+          Object {
+            "CidrIp": "239.255.0.1/32",
+            "Description": "IGMP join",
+            "IpProtocol": "2",
+          },
+          Object {
+            "CidrIp": "239.255.0.1/32",
+            "Description": "IGMP join for UDP Port 20123",
+            "FromPort": 20123,
+            "IpProtocol": "udp",
+            "ToPort": 20123,
+          },
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "VPCB9E5F0B4",
+                "CidrBlock",
+              ],
+            },
+            "Description": "Allow UDP 20123 outbound to VPC CIDR",
+            "FromPort": 20123,
+            "IpProtocol": "udp",
+            "ToPort": 20123,
+          },
+          Object {
+            "CidrIp": "239.255.0.2/32",
+            "Description": "IGMP join",
+            "IpProtocol": "2",
+          },
+          Object {
+            "CidrIp": "239.255.0.2/32",
+            "Description": "IGMP join for UDP Port 20123",
+            "FromPort": 20123,
+            "IpProtocol": "udp",
+            "ToPort": 20123,
+          },
+          Object {
+            "CidrIp": "239.255.0.3/32",
+            "Description": "IGMP join",
+            "IpProtocol": "2",
+          },
+          Object {
+            "CidrIp": "239.255.0.3/32",
+            "Description": "IGMP join for UDP Port 20124",
+            "FromPort": 20124,
+            "IpProtocol": "udp",
+            "ToPort": 20124,
+          },
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "VPCB9E5F0B4",
+                "CidrBlock",
+              ],
+            },
+            "Description": "Allow UDP 20124 outbound to VPC CIDR",
+            "FromPort": 20124,
+            "IpProtocol": "udp",
+            "ToPort": 20124,
+          },
+          Object {
+            "CidrIp": "239.255.0.4/32",
+            "Description": "IGMP join",
+            "IpProtocol": "2",
+          },
+          Object {
+            "CidrIp": "239.255.0.4/32",
+            "Description": "IGMP join for UDP Port 20124",
+            "FromPort": 20124,
+            "IpProtocol": "udp",
+            "ToPort": 20124,
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/32",
+            "Description": "IGMP query",
+            "IpProtocol": "2",
+          },
+          Object {
+            "CidrIp": "239.255.0.1/32",
+            "Description": "Inbound UDP Port 20123 from multicast group",
+            "FromPort": 20123,
+            "IpProtocol": "udp",
+            "ToPort": 20123,
+          },
+          Object {
+            "CidrIp": "239.255.0.2/32",
+            "Description": "Inbound UDP Port 20123 from multicast group",
+            "FromPort": 20123,
+            "IpProtocol": "udp",
+            "ToPort": 20123,
+          },
+          Object {
+            "CidrIp": "239.255.0.3/32",
+            "Description": "Inbound UDP Port 20124 from multicast group",
+            "FromPort": 20124,
+            "IpProtocol": "udp",
+            "ToPort": 20124,
+          },
+          Object {
+            "CidrIp": "239.255.0.4/32",
+            "Description": "Inbound UDP Port 20124 from multicast group",
+            "FromPort": 20124,
+            "IpProtocol": "udp",
+            "ToPort": 20124,
+          },
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "VPCB9E5F0B4",
+                "CidrBlock",
+              ],
+            },
+            "Description": "Allow UDP 20123 inbound from VPC CIDR",
+            "FromPort": 20123,
+            "IpProtocol": "udp",
+            "ToPort": 20123,
+          },
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "VPCB9E5F0B4",
+                "CidrBlock",
+              ],
+            },
+            "Description": "Allow UDP 20124 inbound from VPC CIDR",
+            "FromPort": 20124,
+            "IpProtocol": "udp",
+            "ToPort": 20124,
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "AeronClusterAeronEfaSecurityGroupD768DBFF": Object {
+      "Properties": Object {
+        "GroupDescription": "Security group for EFA Data Traffic of Aeron Cluster",
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "AeronClusterAeronEfaSecurityGroupfromtestAeronClusterAeronEfaSecurityGroup006C97B7ALLTRAFFIC2954328B": Object {
+      "Properties": Object {
+        "Description": "Allow all inbound traffic from to security group",
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronEfaSecurityGroupD768DBFF",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+        "SourceSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronEfaSecurityGroupD768DBFF",
+            "GroupId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "AeronClusterAeronEfaSecurityGrouptotestAeronClusterAeronEfaSecurityGroup006C97B7ALLTRAFFIC70B429DB": Object {
+      "Properties": Object {
+        "Description": "Allow all outbound traffic from this security group",
+        "DestinationSecurityGroupId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronEfaSecurityGroupD768DBFF",
+            "GroupId",
+          ],
+        },
+        "GroupId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronEfaSecurityGroupD768DBFF",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "-1",
+      },
+      "Type": "AWS::EC2::SecurityGroupEgress",
+    },
+    "AeronClusterAeronTrafficNetworkInterface04F5E4BB5": Object {
+      "Properties": Object {
+        "Description": "Dedicated Interface for Aeron Traffic",
+        "GroupSet": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AeronClusterAeronDataSecurityGroup2A50CC39",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet1Subnet6EE5F581",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aeron-data-network-interface",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NetworkInterface",
+    },
+    "AeronClusterAeronTrafficNetworkInterface1142D5941": Object {
+      "Properties": Object {
+        "Description": "Dedicated Interface for Aeron Traffic",
+        "GroupSet": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AeronClusterAeronDataSecurityGroup2A50CC39",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet1Subnet6EE5F581",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aeron-data-network-interface",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NetworkInterface",
+    },
+    "AeronClusterAeronTrafficNetworkInterface2F2CE979E": Object {
+      "Properties": Object {
+        "Description": "Dedicated Interface for Aeron Traffic",
+        "GroupSet": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AeronClusterAeronDataSecurityGroup2A50CC39",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet1Subnet6EE5F581",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aeron-data-network-interface",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NetworkInterface",
+    },
+    "AeronClusterAeronTrafficNetworkInterfaceAttachment0D0FC0E52": Object {
+      "Properties": Object {
+        "DeviceIndex": "1",
+        "InstanceId": Object {
+          "Ref": "AeronClusterInstance0F2E49FA8",
+        },
+        "NetworkInterfaceId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronTrafficNetworkInterface04F5E4BB5",
+            "Id",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::NetworkInterfaceAttachment",
+    },
+    "AeronClusterAeronTrafficNetworkInterfaceAttachment1C2DD9049": Object {
+      "Properties": Object {
+        "DeviceIndex": "1",
+        "InstanceId": Object {
+          "Ref": "AeronClusterInstance127C2AE61",
+        },
+        "NetworkInterfaceId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronTrafficNetworkInterface1142D5941",
+            "Id",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::NetworkInterfaceAttachment",
+    },
+    "AeronClusterAeronTrafficNetworkInterfaceAttachment2F5F69147": Object {
+      "Properties": Object {
+        "DeviceIndex": "1",
+        "InstanceId": Object {
+          "Ref": "AeronClusterInstance2B398DDB6",
+        },
+        "NetworkInterfaceId": Object {
+          "Fn::GetAtt": Array [
+            "AeronClusterAeronTrafficNetworkInterface2F2CE979E",
+            "Id",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::NetworkInterfaceAttachment",
+    },
+    "AeronClusterEfaTrafficNetworkInterface04CA69D28": Object {
+      "Properties": Object {
+        "Description": "EFA interface for Aeron Traffic",
+        "GroupSet": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AeronClusterAeronEfaSecurityGroupD768DBFF",
+              "GroupId",
+            ],
+          },
+        ],
+        "InterfaceType": "efa",
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet1Subnet6EE5F581",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aeron-data-efa",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NetworkInterface",
+    },
+    "AeronClusterEfaTrafficNetworkInterface1C76B9F5D": Object {
+      "Properties": Object {
+        "Description": "EFA interface for Aeron Traffic",
+        "GroupSet": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AeronClusterAeronEfaSecurityGroupD768DBFF",
+              "GroupId",
+            ],
+          },
+        ],
+        "InterfaceType": "efa",
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet1Subnet6EE5F581",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aeron-data-efa",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NetworkInterface",
+    },
+    "AeronClusterEfaTrafficNetworkInterface255AF8117": Object {
+      "Properties": Object {
+        "Description": "EFA interface for Aeron Traffic",
+        "GroupSet": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AeronClusterAeronEfaSecurityGroupD768DBFF",
+              "GroupId",
+            ],
+          },
+        ],
+        "InterfaceType": "efa",
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet1Subnet6EE5F581",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "aeron-data-efa",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NetworkInterface",
+    },
+    "AeronClusterInstance0F2E49FA8": Object {
+      "DependsOn": Array [
+        "AeronClusterInstance0InstanceRoleDefaultPolicyAF2990E8",
+        "AeronClusterInstance0InstanceRoleC4E6EF67",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "IamInstanceProfile": Object {
+          "Ref": "AeronClusterInstance0InstanceProfile6B879ECB",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsservicecanonicalubuntuserverfocalstablecurrentamd64hvmebsgp2amiidC96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "m5dn.24xlarge",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AeronClusterAeronControlSecurityGroup4C75EBFF",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": Object {
+          "Ref": "VPCControlSubnet1Subnet294B20F2",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/AeronCluster/Instance0",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/bash
+#!/bin/bash
+
+# Enforce IGMPv2
+sudo sysctl -w net.ipv4.conf.eth1.force_igmp_version=2
+echo \\"net.ipv4.conf.eth1.force_igmp_version = 2\\" | sudo tee -a /etc/sysctl.conf
+
+sudo route add -net 224.0.0.0 netmask 240.0.0.0 eth1
+# /etc/network/interfaces
+# echo \\"224.0.0.0/4 dev eth1\\" | sudo tee -a /etc/sysconfig/network-scripts/route-eth1
+
+sudo apt update
+
+# Install htop
+sudo apt install -y git iperf htop
+
+# Install build utilities
+sudo apt install -y build-essential cmake
+
+# Install performance monitoring tools
+sudo apt install -y linux-tools-common linux-tools-generic linux-tools-\`uname -r\`
+
+# Install tuna
+# sudo yum install -y tuna
+
+# Install gcc & g++
+# sudo yum install -y gcc-c++
+# sudo yum install -y cmake3
+# sudo ln -sf /usr/bin/cmake3 /usr/bin/cmake
+# sudo ln -sf /usr/bin/ctest3 /usr/bin/ctest
+
+# script for disabling HT
+cat > /usr/local/bin/disableht.sh << EOF
+#!/usr/bin/env bash
+
+for cpunum in $(cat /sys/devices/system/cpu/cpu*/topology/thread_siblings_list | cut -s -d, -f2- | tr ',' '\\\\n' | sort -un)
+do
+  echo 0 > /sys/devices/system/cpu/cpu$cpunum/online
+done
+EOF
+sudo chmod +x /usr/local/bin/disableht.sh
+sudo /usr/local/bin/disableht.sh
+
+# Install jdk8
+sudo apt install -qq default-jdk
+# Install Amazon Corretto 11
+# sudo yum install -y java-11-amazon-corretto.x86_64
+
+# Download CodeGuru
+sudo mkdir -p /opt/codeguru && cd /opt/codeguru
+wget https://repo1.maven.org/maven2/software/amazon/codeguruprofiler/codeguru-profiler-java-agent-standalone/1.2.1/codeguru-profiler-java-agent-standalone-1.2.1.jar
+
+cd /opt && git clone https://github.com/real-logic/aeron.git
+
+cd /opt/aeron && git checkout tags/1.37.0 && ./gradlew
+
+sudo chown -R ssm-user /opt/aeron
+",
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "AeronClusterInstance0InstanceProfile6B879ECB": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "AeronClusterInstance0InstanceRoleC4E6EF67",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "AeronClusterInstance0InstanceRoleC4E6EF67": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/AeronCluster/Instance0",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "AeronClusterInstance0InstanceRoleDefaultPolicyAF2990E8": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ssmmessages:*",
+                "ssm:UpdateInstanceInformation",
+                "ec2messages:*",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "AeronClusterInstance0InstanceRoleDefaultPolicyAF2990E8",
+        "Roles": Array [
+          Object {
+            "Ref": "AeronClusterInstance0InstanceRoleC4E6EF67",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "AeronClusterInstance127C2AE61": Object {
+      "DependsOn": Array [
+        "AeronClusterInstance1InstanceRoleDefaultPolicy87EEB204",
+        "AeronClusterInstance1InstanceRole84D2178E",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "IamInstanceProfile": Object {
+          "Ref": "AeronClusterInstance1InstanceProfileA312E6D2",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsservicecanonicalubuntuserverfocalstablecurrentamd64hvmebsgp2amiidC96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "m5dn.24xlarge",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AeronClusterAeronControlSecurityGroup4C75EBFF",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": Object {
+          "Ref": "VPCControlSubnet1Subnet294B20F2",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/AeronCluster/Instance1",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/bash
+#!/bin/bash
+
+# Enforce IGMPv2
+sudo sysctl -w net.ipv4.conf.eth1.force_igmp_version=2
+echo \\"net.ipv4.conf.eth1.force_igmp_version = 2\\" | sudo tee -a /etc/sysctl.conf
+
+sudo route add -net 224.0.0.0 netmask 240.0.0.0 eth1
+# /etc/network/interfaces
+# echo \\"224.0.0.0/4 dev eth1\\" | sudo tee -a /etc/sysconfig/network-scripts/route-eth1
+
+sudo apt update
+
+# Install htop
+sudo apt install -y git iperf htop
+
+# Install build utilities
+sudo apt install -y build-essential cmake
+
+# Install performance monitoring tools
+sudo apt install -y linux-tools-common linux-tools-generic linux-tools-\`uname -r\`
+
+# Install tuna
+# sudo yum install -y tuna
+
+# Install gcc & g++
+# sudo yum install -y gcc-c++
+# sudo yum install -y cmake3
+# sudo ln -sf /usr/bin/cmake3 /usr/bin/cmake
+# sudo ln -sf /usr/bin/ctest3 /usr/bin/ctest
+
+# script for disabling HT
+cat > /usr/local/bin/disableht.sh << EOF
+#!/usr/bin/env bash
+
+for cpunum in $(cat /sys/devices/system/cpu/cpu*/topology/thread_siblings_list | cut -s -d, -f2- | tr ',' '\\\\n' | sort -un)
+do
+  echo 0 > /sys/devices/system/cpu/cpu$cpunum/online
+done
+EOF
+sudo chmod +x /usr/local/bin/disableht.sh
+sudo /usr/local/bin/disableht.sh
+
+# Install jdk8
+sudo apt install -qq default-jdk
+# Install Amazon Corretto 11
+# sudo yum install -y java-11-amazon-corretto.x86_64
+
+# Download CodeGuru
+sudo mkdir -p /opt/codeguru && cd /opt/codeguru
+wget https://repo1.maven.org/maven2/software/amazon/codeguruprofiler/codeguru-profiler-java-agent-standalone/1.2.1/codeguru-profiler-java-agent-standalone-1.2.1.jar
+
+cd /opt && git clone https://github.com/real-logic/aeron.git
+
+cd /opt/aeron && git checkout tags/1.37.0 && ./gradlew
+
+sudo chown -R ssm-user /opt/aeron
+",
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "AeronClusterInstance1InstanceProfileA312E6D2": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "AeronClusterInstance1InstanceRole84D2178E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "AeronClusterInstance1InstanceRole84D2178E": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/AeronCluster/Instance1",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "AeronClusterInstance1InstanceRoleDefaultPolicy87EEB204": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ssmmessages:*",
+                "ssm:UpdateInstanceInformation",
+                "ec2messages:*",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "AeronClusterInstance1InstanceRoleDefaultPolicy87EEB204",
+        "Roles": Array [
+          Object {
+            "Ref": "AeronClusterInstance1InstanceRole84D2178E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "AeronClusterInstance2B398DDB6": Object {
+      "DependsOn": Array [
+        "AeronClusterInstance2InstanceRoleDefaultPolicy46D03F04",
+        "AeronClusterInstance2InstanceRoleFF45EC49",
+      ],
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "IamInstanceProfile": Object {
+          "Ref": "AeronClusterInstance2InstanceProfileFB4CD4D8",
+        },
+        "ImageId": Object {
+          "Ref": "SsmParameterValueawsservicecanonicalubuntuserverfocalstablecurrentamd64hvmebsgp2amiidC96584B6F00A464EAD1953AFF4B05118Parameter",
+        },
+        "InstanceType": "m5dn.24xlarge",
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "AeronClusterAeronControlSecurityGroup4C75EBFF",
+              "GroupId",
+            ],
+          },
+        ],
+        "SubnetId": Object {
+          "Ref": "VPCControlSubnet1Subnet294B20F2",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/AeronCluster/Instance2",
+          },
+        ],
+        "UserData": Object {
+          "Fn::Base64": "#!/bin/bash
+#!/bin/bash
+
+# Enforce IGMPv2
+sudo sysctl -w net.ipv4.conf.eth1.force_igmp_version=2
+echo \\"net.ipv4.conf.eth1.force_igmp_version = 2\\" | sudo tee -a /etc/sysctl.conf
+
+sudo route add -net 224.0.0.0 netmask 240.0.0.0 eth1
+# /etc/network/interfaces
+# echo \\"224.0.0.0/4 dev eth1\\" | sudo tee -a /etc/sysconfig/network-scripts/route-eth1
+
+sudo apt update
+
+# Install htop
+sudo apt install -y git iperf htop
+
+# Install build utilities
+sudo apt install -y build-essential cmake
+
+# Install performance monitoring tools
+sudo apt install -y linux-tools-common linux-tools-generic linux-tools-\`uname -r\`
+
+# Install tuna
+# sudo yum install -y tuna
+
+# Install gcc & g++
+# sudo yum install -y gcc-c++
+# sudo yum install -y cmake3
+# sudo ln -sf /usr/bin/cmake3 /usr/bin/cmake
+# sudo ln -sf /usr/bin/ctest3 /usr/bin/ctest
+
+# script for disabling HT
+cat > /usr/local/bin/disableht.sh << EOF
+#!/usr/bin/env bash
+
+for cpunum in $(cat /sys/devices/system/cpu/cpu*/topology/thread_siblings_list | cut -s -d, -f2- | tr ',' '\\\\n' | sort -un)
+do
+  echo 0 > /sys/devices/system/cpu/cpu$cpunum/online
+done
+EOF
+sudo chmod +x /usr/local/bin/disableht.sh
+sudo /usr/local/bin/disableht.sh
+
+# Install jdk8
+sudo apt install -qq default-jdk
+# Install Amazon Corretto 11
+# sudo yum install -y java-11-amazon-corretto.x86_64
+
+# Download CodeGuru
+sudo mkdir -p /opt/codeguru && cd /opt/codeguru
+wget https://repo1.maven.org/maven2/software/amazon/codeguruprofiler/codeguru-profiler-java-agent-standalone/1.2.1/codeguru-profiler-java-agent-standalone-1.2.1.jar
+
+cd /opt && git clone https://github.com/real-logic/aeron.git
+
+cd /opt/aeron && git checkout tags/1.37.0 && ./gradlew
+
+sudo chown -R ssm-user /opt/aeron
+",
+        },
+      },
+      "Type": "AWS::EC2::Instance",
+    },
+    "AeronClusterInstance2InstanceProfileFB4CD4D8": Object {
+      "Properties": Object {
+        "Roles": Array [
+          Object {
+            "Ref": "AeronClusterInstance2InstanceRoleFF45EC49",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::InstanceProfile",
+    },
+    "AeronClusterInstance2InstanceRoleDefaultPolicy46D03F04": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": Array [
+                "ssmmessages:*",
+                "ssm:UpdateInstanceInformation",
+                "ec2messages:*",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "AeronClusterInstance2InstanceRoleDefaultPolicy46D03F04",
+        "Roles": Array [
+          Object {
+            "Ref": "AeronClusterInstance2InstanceRoleFF45EC49",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "AeronClusterInstance2InstanceRoleFF45EC49": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "ec2.",
+                      Object {
+                        "Ref": "AWS::URLSuffix",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/AeronCluster/Instance2",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "AeronMulticastAeronMulticastTransitGatewayBDF277AB": Object {
+      "Properties": Object {
+        "AutoAcceptSharedAttachments": "disable",
+        "DefaultRouteTableAssociation": "disable",
+        "DefaultRouteTablePropagation": "disable",
+        "DnsSupport": "disable",
+        "MulticastSupport": "enable",
+        "VpnEcmpSupport": "disable",
+      },
+      "Type": "AWS::EC2::TransitGateway",
+    },
+    "AeronMulticastAeronMulticastTransitGatewayMulticastDomainAssociation0D268BF40": Object {
+      "Properties": Object {
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet1Subnet6EE5F581",
+        },
+        "TransitGatewayAttachmentId": Object {
+          "Fn::GetAtt": Array [
+            "AeronMulticastAeronMulticastTransitGatewayVpcAttachmentAE0C665D",
+            "Id",
+          ],
+        },
+        "TransitGatewayMulticastDomainId": Object {
+          "Fn::GetAtt": Array [
+            "AeronMulticastAeronMulticastTransitGatewayMulticastDomainCB7D3CB4",
+            "TransitGatewayMulticastDomainId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayMulticastDomainAssociation",
+    },
+    "AeronMulticastAeronMulticastTransitGatewayMulticastDomainAssociation1029561C9": Object {
+      "Properties": Object {
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet2Subnet2A2478A7",
+        },
+        "TransitGatewayAttachmentId": Object {
+          "Fn::GetAtt": Array [
+            "AeronMulticastAeronMulticastTransitGatewayVpcAttachmentAE0C665D",
+            "Id",
+          ],
+        },
+        "TransitGatewayMulticastDomainId": Object {
+          "Fn::GetAtt": Array [
+            "AeronMulticastAeronMulticastTransitGatewayMulticastDomainCB7D3CB4",
+            "TransitGatewayMulticastDomainId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayMulticastDomainAssociation",
+    },
+    "AeronMulticastAeronMulticastTransitGatewayMulticastDomainAssociation29189DD43": Object {
+      "Properties": Object {
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet3Subnet6CB0EF39",
+        },
+        "TransitGatewayAttachmentId": Object {
+          "Fn::GetAtt": Array [
+            "AeronMulticastAeronMulticastTransitGatewayVpcAttachmentAE0C665D",
+            "Id",
+          ],
+        },
+        "TransitGatewayMulticastDomainId": Object {
+          "Fn::GetAtt": Array [
+            "AeronMulticastAeronMulticastTransitGatewayMulticastDomainCB7D3CB4",
+            "TransitGatewayMulticastDomainId",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayMulticastDomainAssociation",
+    },
+    "AeronMulticastAeronMulticastTransitGatewayMulticastDomainCB7D3CB4": Object {
+      "Properties": Object {
+        "Options": Object {
+          "AutoAcceptSharedAssociations": "disable",
+          "Igmpv2Support": "enable",
+          "StaticSourcesSupport": "disable",
+        },
+        "TransitGatewayId": Object {
+          "Fn::GetAtt": Array [
+            "AeronMulticastAeronMulticastTransitGatewayBDF277AB",
+            "Id",
+          ],
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayMulticastDomain",
+    },
+    "AeronMulticastAeronMulticastTransitGatewayVpcAttachmentAE0C665D": Object {
+      "Properties": Object {
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VPCDataSubnet1Subnet6EE5F581",
+          },
+          Object {
+            "Ref": "VPCDataSubnet2Subnet2A2478A7",
+          },
+          Object {
+            "Ref": "VPCDataSubnet3Subnet6CB0EF39",
+          },
+        ],
+        "TransitGatewayId": Object {
+          "Fn::GetAtt": Array [
+            "AeronMulticastAeronMulticastTransitGatewayBDF277AB",
+            "Id",
+          ],
+        },
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::TransitGatewayVpcAttachment",
+    },
+    "VPCB9E5F0B4": Object {
+      "Properties": Object {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "VPCControlSubnet1DefaultRoute6EC73AF8": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "VPCIngressSubnet1NATGatewayEA4AE80E",
+        },
+        "RouteTableId": Object {
+          "Ref": "VPCControlSubnet1RouteTable8A7DA4FB",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VPCControlSubnet1RouteTable8A7DA4FB": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/ControlSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCControlSubnet1RouteTableAssociationA01D1A99": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCControlSubnet1RouteTable8A7DA4FB",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCControlSubnet1Subnet294B20F2",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCControlSubnet1Subnet294B20F2": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.3.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Control",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/ControlSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCControlSubnet2DefaultRoute6476E9CC": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "VPCIngressSubnet2NATGateway68BB4190",
+        },
+        "RouteTableId": Object {
+          "Ref": "VPCControlSubnet2RouteTable5E7B1CAD",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VPCControlSubnet2RouteTable5E7B1CAD": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/ControlSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCControlSubnet2RouteTableAssociation60038400": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCControlSubnet2RouteTable5E7B1CAD",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCControlSubnet2SubnetDA1966E3",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCControlSubnet2SubnetDA1966E3": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.4.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Control",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/ControlSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCControlSubnet3DefaultRoute7888A578": Object {
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "NatGatewayId": Object {
+          "Ref": "VPCIngressSubnet3NATGatewayF804BFD1",
+        },
+        "RouteTableId": Object {
+          "Ref": "VPCControlSubnet3RouteTable2044FAB6",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VPCControlSubnet3RouteTable2044FAB6": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/ControlSubnet3",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCControlSubnet3RouteTableAssociationD9FB478C": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCControlSubnet3RouteTable2044FAB6",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCControlSubnet3SubnetA1466CB7",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCControlSubnet3SubnetA1466CB7": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1c",
+        "CidrBlock": "10.0.5.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Control",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Private",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/ControlSubnet3",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCDataSubnet1RouteTableAssociation8B02A4E9": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCDataSubnet1RouteTableBF05C1EE",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet1Subnet6EE5F581",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCDataSubnet1RouteTableBF05C1EE": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/DataSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCDataSubnet1Subnet6EE5F581": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.6.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Data",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/DataSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCDataSubnet2RouteTable07099A22": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/DataSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCDataSubnet2RouteTableAssociation2C27F1A0": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCDataSubnet2RouteTable07099A22",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet2Subnet2A2478A7",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCDataSubnet2Subnet2A2478A7": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.7.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Data",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/DataSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCDataSubnet3RouteTableA87E0911": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/DataSubnet3",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCDataSubnet3RouteTableAssociation26490282": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCDataSubnet3RouteTableA87E0911",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCDataSubnet3Subnet6CB0EF39",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCDataSubnet3Subnet6CB0EF39": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1c",
+        "CidrBlock": "10.0.8.0/24",
+        "MapPublicIpOnLaunch": false,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Data",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Isolated",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/DataSubnet3",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCEc2MessagesEndpoint53B619D2": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VPCEc2MessagesEndpointSecurityGroup42A749E9",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.dummy-region-a.ec2messages",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VPCControlSubnet1Subnet294B20F2",
+          },
+          Object {
+            "Ref": "VPCControlSubnet2SubnetDA1966E3",
+          },
+          Object {
+            "Ref": "VPCControlSubnet3SubnetA1466CB7",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VPCEc2MessagesEndpointSecurityGroup42A749E9": Object {
+      "Properties": Object {
+        "GroupDescription": "test/VPC/Ec2MessagesEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "VPCB9E5F0B4",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "VPCB9E5F0B4",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VPCFlowLogS3FlowLog14B02CD7": Object {
+      "Properties": Object {
+        "LogDestination": Object {
+          "Fn::GetAtt": Array [
+            "VpcFlowLogsBucket3B29CF33",
+            "Arn",
+          ],
+        },
+        "LogDestinationType": "s3",
+        "ResourceId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+        "ResourceType": "VPC",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC",
+          },
+        ],
+        "TrafficType": "ALL",
+      },
+      "Type": "AWS::EC2::FlowLog",
+    },
+    "VPCIGWB7E252D3": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "VPCIngressSubnet1DefaultRouteFE025494": Object {
+      "DependsOn": Array [
+        "VPCVPCGW99B986DC",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "VPCIGWB7E252D3",
+        },
+        "RouteTableId": Object {
+          "Ref": "VPCIngressSubnet1RouteTable9BE753A6",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VPCIngressSubnet1EIP99406D22": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "VPCIngressSubnet1NATGatewayEA4AE80E": Object {
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "VPCIngressSubnet1EIP99406D22",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "VPCIngressSubnet1Subnet4257CD65",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet1",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "VPCIngressSubnet1RouteTable9BE753A6": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCIngressSubnet1RouteTableAssociationCAFE4089": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCIngressSubnet1RouteTable9BE753A6",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCIngressSubnet1Subnet4257CD65",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCIngressSubnet1Subnet4257CD65": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1a",
+        "CidrBlock": "10.0.0.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Ingress",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet1",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCIngressSubnet2DefaultRoute9FF8300E": Object {
+      "DependsOn": Array [
+        "VPCVPCGW99B986DC",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "VPCIGWB7E252D3",
+        },
+        "RouteTableId": Object {
+          "Ref": "VPCIngressSubnet2RouteTableDFE1B4BC",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VPCIngressSubnet2EIPCE44C233": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "VPCIngressSubnet2NATGateway68BB4190": Object {
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "VPCIngressSubnet2EIPCE44C233",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "VPCIngressSubnet2SubnetE0EA735B",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet2",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "VPCIngressSubnet2RouteTableAssociationB244DE25": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCIngressSubnet2RouteTableDFE1B4BC",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCIngressSubnet2SubnetE0EA735B",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCIngressSubnet2RouteTableDFE1B4BC": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCIngressSubnet2SubnetE0EA735B": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1b",
+        "CidrBlock": "10.0.1.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Ingress",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet2",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCIngressSubnet3DefaultRouteD4DCD60F": Object {
+      "DependsOn": Array [
+        "VPCVPCGW99B986DC",
+      ],
+      "Properties": Object {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": Object {
+          "Ref": "VPCIGWB7E252D3",
+        },
+        "RouteTableId": Object {
+          "Ref": "VPCIngressSubnet3RouteTableBA29E68D",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "VPCIngressSubnet3EIP7A19F11D": Object {
+      "Properties": Object {
+        "Domain": "vpc",
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet3",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::EIP",
+    },
+    "VPCIngressSubnet3NATGatewayF804BFD1": Object {
+      "Properties": Object {
+        "AllocationId": Object {
+          "Fn::GetAtt": Array [
+            "VPCIngressSubnet3EIP7A19F11D",
+            "AllocationId",
+          ],
+        },
+        "SubnetId": Object {
+          "Ref": "VPCIngressSubnet3Subnet5B03B6AE",
+        },
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet3",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::NatGateway",
+    },
+    "VPCIngressSubnet3RouteTableAssociationF8544212": Object {
+      "Properties": Object {
+        "RouteTableId": Object {
+          "Ref": "VPCIngressSubnet3RouteTableBA29E68D",
+        },
+        "SubnetId": Object {
+          "Ref": "VPCIngressSubnet3Subnet5B03B6AE",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "VPCIngressSubnet3RouteTableBA29E68D": Object {
+      "Properties": Object {
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet3",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "VPCIngressSubnet3Subnet5B03B6AE": Object {
+      "Properties": Object {
+        "AvailabilityZone": "dummy1c",
+        "CidrBlock": "10.0.2.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": Array [
+          Object {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "Ingress",
+          },
+          Object {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC/IngressSubnet3",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "VPCSsmEndpointEE7F07EF": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VPCSsmEndpointSecurityGroup1CD30E18",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.dummy-region-a.ssm",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VPCControlSubnet1Subnet294B20F2",
+          },
+          Object {
+            "Ref": "VPCControlSubnet2SubnetDA1966E3",
+          },
+          Object {
+            "Ref": "VPCControlSubnet3SubnetA1466CB7",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VPCSsmEndpointSecurityGroup1CD30E18": Object {
+      "Properties": Object {
+        "GroupDescription": "test/VPC/SsmEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "VPCB9E5F0B4",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "VPCB9E5F0B4",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VPCSsmMessagesEndpoint67C837C6": Object {
+      "Properties": Object {
+        "PrivateDnsEnabled": true,
+        "SecurityGroupIds": Array [
+          Object {
+            "Fn::GetAtt": Array [
+              "VPCSsmMessagesEndpointSecurityGroupCB1EAC59",
+              "GroupId",
+            ],
+          },
+        ],
+        "ServiceName": "com.amazonaws.dummy-region-a.ssmmessages",
+        "SubnetIds": Array [
+          Object {
+            "Ref": "VPCControlSubnet1Subnet294B20F2",
+          },
+          Object {
+            "Ref": "VPCControlSubnet2SubnetDA1966E3",
+          },
+          Object {
+            "Ref": "VPCControlSubnet3SubnetA1466CB7",
+          },
+        ],
+        "VpcEndpointType": "Interface",
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::VPCEndpoint",
+    },
+    "VPCSsmMessagesEndpointSecurityGroupCB1EAC59": Object {
+      "Properties": Object {
+        "GroupDescription": "test/VPC/SsmMessagesEndpoint/SecurityGroup",
+        "SecurityGroupEgress": Array [
+          Object {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "SecurityGroupIngress": Array [
+          Object {
+            "CidrIp": Object {
+              "Fn::GetAtt": Array [
+                "VPCB9E5F0B4",
+                "CidrBlock",
+              ],
+            },
+            "Description": Object {
+              "Fn::Join": Array [
+                "",
+                Array [
+                  "from ",
+                  Object {
+                    "Fn::GetAtt": Array [
+                      "VPCB9E5F0B4",
+                      "CidrBlock",
+                    ],
+                  },
+                  ":443",
+                ],
+              ],
+            },
+            "FromPort": 443,
+            "IpProtocol": "tcp",
+            "ToPort": 443,
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "Name",
+            "Value": "test/VPC",
+          },
+        ],
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "VPCVPCGW99B986DC": Object {
+      "Properties": Object {
+        "InternetGatewayId": Object {
+          "Ref": "VPCIGWB7E252D3",
+        },
+        "VpcId": Object {
+          "Ref": "VPCB9E5F0B4",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "VpcFlowLogsBucket3B29CF33": Object {
+      "DeletionPolicy": "Retain",
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+  },
+  "Rules": Object {
+    "CheckBootstrapVersion": Object {
+      "Assertions": Array [
+        Object {
+          "Assert": Object {
+            "Fn::Not": Array [
+              Object {
+                "Fn::Contains": Array [
+                  Array [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  Object {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

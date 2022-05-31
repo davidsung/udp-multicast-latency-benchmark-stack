@@ -1,0 +1,16 @@
+{
+  "availability-zones:account=900836705824:region=ap-northeast-1": [
+    "ap-northeast-1a",
+    "ap-northeast-1c",
+    "ap-northeast-1d"
+  ],
+  "ami:account=900836705824:filters.image-type.0=machine:filters.name.0=amzn2-ami-kernel-5.10-hvm-*:filters.state.0=available:owners.0=amazon:region=ap-northeast-1": "ami-032d6db78f84e8bf5",
+  "availability-zones:account=900836705824:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ]
+}
